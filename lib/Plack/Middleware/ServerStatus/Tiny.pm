@@ -2,9 +2,9 @@ use strict;
 use warnings;
 package Plack::Middleware::ServerStatus::Tiny;
 {
-  $Plack::Middleware::ServerStatus::Tiny::VERSION = '0.001';
+  $Plack::Middleware::ServerStatus::Tiny::VERSION = '0.002';
 }
-# git description: dc0b6e3
+# git description: v0.001-4-geb5f2f5
 
 BEGIN {
   $Plack::Middleware::ServerStatus::Tiny::AUTHORITY = 'cpan:ETHER';
@@ -13,6 +13,7 @@ BEGIN {
 
 use parent 'Plack::Middleware';
 use Plack::Util::Accessor qw(path _uptime _access_count);
+use Plack::Response;
 
 sub prepare_app
 {
@@ -62,7 +63,7 @@ Plack::Middleware::ServerStatus::Tiny - tiny middleware for providing server sta
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 SYNOPSIS
 
@@ -74,7 +75,7 @@ version 0.001
     };
 
     $ curl http://server:port/status
-    uptime: 120; access count: 10 (this process only)
+    uptime: 120; access count: 10
 
 =head1 DESCRIPTION
 
@@ -84,8 +85,9 @@ showing the status of all workers, their pids and their last requests, it can
 be a bit heavy for frequent pinging (for example by a load balancer to confirm
 that the server is still up).
 
-This middleware does not use the disk, keeping all its data in memory in the
-worker process.  All it returns is the number of seconds since the last server
+This middleware does not interrogate the system about running processes,
+and does not use the disk, keeping all its data in memory in the
+worker process. All it returns is the number of seconds since the last server
 restart, and how many requests this particular process has serviced.
 
 =head1 CONFIGURATION
